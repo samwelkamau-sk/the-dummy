@@ -9,6 +9,9 @@ flask = "*"
 flask-cors = "*"
 python-dotenv = "*"
 requests = "*"
+flask-migrate = "*"
+flask-sqlalchemy = "*"
+marshmallow = "*"
 
 [dev-packages]
 

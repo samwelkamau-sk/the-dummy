@@ -33,7 +33,7 @@ function normalizeTmdbMovie(m) {
   };
 }
 
-function normalizeBackendMovie(m) {
+export function normalizeBackendMovie(m) {
   return {
     id: `movie-${m.id}`,
     tmdbId: m.tmdb_id,
@@ -44,6 +44,9 @@ function normalizeBackendMovie(m) {
     year: m.year || null,
     rating: m.rating ? parseFloat(Number(m.rating).toFixed(1)) : null,
     duration: m.duration || null,
+    // UI-only fields the backend doesn't persist; defaulted for the library views
+    status: 'watchlist',
+    isFavorite: false,
   };
 }
 

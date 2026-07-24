@@ -79,7 +79,9 @@ export default function Profile() {
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                   <div>
                     <div className="font-semibold text-white">{pred.home_name} vs {pred.away_name}</div>
-                    <div className="mt-1 text-sm text-on-surface-variant">Prediction: {pred.predicted_winner_id === pred.team_home_id ? 'Home' : pred.predicted_winner_id === pred.team_away_id ? 'Away' : 'Draw'}</div>
+                    <div className="mt-1 text-sm text-on-surface-variant">
+                      Prediction locked{pred.match_date ? ` · ${new Date(pred.match_date).toLocaleDateString()}` : ''}
+                    </div>
                   </div>
                   <div className="rounded-2xl border border-popcorn-gold/20 bg-popcorn-gold/10 px-4 py-2 text-right">
                     <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-popcorn-gold">Confidence</div>

@@ -6,7 +6,7 @@ export default function MyLibraryView({
    collections = [],
    history = [],
    searchQuery = '',
-   onAddMovie,
+   onCreateMovie,
    onDeleteMovie,
    onUpdateMovieStatus,
    onAddCollection,
@@ -59,23 +59,19 @@ export default function MyLibraryView({
 
   const handleAddMovie = async () => {
     if (!newMovie.title.trim()) return;
-    await onAddMovie({
-      id: Math.random().toString(36).substring(2, 9),
+    await onCreateMovie({
       title: newMovie.title.trim(),
-      year: parseInt(newMovie.year) || new Date().getFullYear(),
+      year: parseInt(newMovie.year) || null,
       genre: newMovie.genre,
-      duration: newMovie.duration || 'N/A',
+      duration: newMovie.duration || null,
       rating: parseFloat(newMovie.rating) || null,
-      status: 'watchlist',
-      isFavorite: false,
-      posterUrl: null,
     });
     setNewMovie({ title: '', year: '', genre: 'Drama', duration: '', rating: '' });
     setShowAddMovieModal(false);
   };
 
   const handleToggleFavorite = (movie) =>
-    onAddMovie({ ...movie, isFavorite: !movie.isFavorite });
+    onUpdateMovieStatus(movie.id, { isFavorite: !movie.isFavorite });
 
   return (
     <div className="space-y-10">
@@ -218,7 +214,7 @@ export default function MyLibraryView({
                 <p className="text-[8px] text-on-surface-variant mt-0.5">{movie.year} &middot; {movie.genre}</p>
 
                 <div className="flex gap-2 mt-2">
-                  <select value={movie.status || 'watchlist'} onChange={(e) => onUpdateMovieStatus(movie.id, e.target.value)}
+                  <select value={movie.status || 'watchlist'} onChange={(e) => onUpdateMovieStatus(movie.id, { status: e.target.value })}
                     onClick={(e) => e.stopPropagation()}
                     className="flex-1 bg-surface-container-low border border-surface-container-high text-[8px] px-1.5 py-1 text-white cursor-pointer outline-none hover:border-surface-container-high">
                     <option value="watchlist">Watchlist</option>

@@ -103,3 +103,28 @@
 - **Samwel Kamau (Forms & Log Engines):** Focus on dynamic, clean validation states for client onboarding inputs (/login, /signup, /forgot-password) and the match validation layout tools (/fixtures/create).
 
 - **James Nzuki (Gamified Core UI Developer):** Implement the primary interactive interfaces—rendering the real-time simulation tickers on /match/:id (PopcornJam feed) and building the status meters and analytics tables on /dashboard and /profile.
+
+
+
+
+
+
+
+
+
+
+
+
+
+# STRATEGY TO USE FOR DEVELOPING THIS PROJECT'S FRONTEND & BACKEND.
+- CREATE RESOURCES FOLDER WITH THE NEEDED FILES
+- SQL QUERRING THE DATABASE SCHEMA
+- SQL SEEDING THE DATABASE WITH INITIAL DATA
+- SETUP FLASK REST API ENDPOINTS
+- IMPLEMENT AUTHENTICATION & JWT PROTECTED ROUTES
+- code should be scalable and clean
+- implement real-time WebSocket integration for live match updates and synchronized user predictions
+- make sure there arer no loop holes (debug)
+- document all the endpoints and should be 'SHAREABLE' to team
+- consuming end point
+- authentication and authorization

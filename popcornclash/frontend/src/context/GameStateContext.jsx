@@ -29,6 +29,7 @@ export const GameStateProvider = ({ children }) => {
   }, [user]);
 
   const logout = () => {
+    localStorage.removeItem('token');
     setUser(defaultUser);
   };
 

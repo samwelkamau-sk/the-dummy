@@ -7,6 +7,14 @@
       "createdAt": "2026-07-10T07:31:35.424Z",
       "remote": "origin",
       "branchOwned": true
+    },
+    "wt-1784189135317-1": {
+      "branch": "uncovered-centaur",
+      "path": "/home/james-nzuki/Desktop/POPCLASH.DUMMY/.kilo/worktrees/uncovered-centaur",
+      "parentBranch": "main",
+      "createdAt": "2026-07-16T08:05:35.317Z",
+      "remote": "origin",
+      "branchOwned": true
     }
   },
   "sessions": {
@@ -17,18 +25,32 @@
     "ses_0a0b2956effeZcjIpe3woNwUip": {
       "worktreeId": "wt-1783668695424-1",
       "createdAt": "2026-07-14T06:25:36.955Z"
+    },
+    "ses_0990f8bceffekGwJTzzUAQ22XA": {
+      "worktreeId": "wt-1784189135317-1",
+      "createdAt": "2026-07-16T08:05:35.320Z"
     }
   },
   "tabOrder": {
     "local": [
-      "pending:1"
+      "pending:f41044a7-631e-46bc-95e7-6a8b80e78102",
+      "ses_096047b0cffeu8jQCZU97SRMRV",
+      "ses_09602cb92ffeJjd6x2b6i1zB63",
+      "ses_0b50f8c71ffexQ0j89Slgb2TuX",
+      "ses_0ba924d48ffeIGncmepDe8HkKo",
+      "ses_0c2a6e92cffeNPM8mg15WjYKaV",
+      "ses_0c9c7132cffe5iuU6no5c6zSrh"
     ],
     "wt-1783668695424-1": [
       "ses_0b4e30bb1ffef92jfjrF7kz4k4",
       "ses_0a0b2956effeZcjIpe3woNwUip"
+    ],
+    "wt-1784189135317-1": [
+      "ses_0990f8bceffekGwJTzzUAQ22XA"
     ]
   },
   "worktreeOrder": [
+    "wt-1784189135317-1",
     "wt-1783668695424-1"
   ],
   "sessionsCollapsed": false

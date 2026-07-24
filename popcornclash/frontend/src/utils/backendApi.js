@@ -49,4 +49,19 @@ export const api = {
     profile: () => request('/api/users/profile'),
     updateProfile: (data) => request('/api/users/profile', { method: 'PATCH', body: JSON.stringify(data) }),
   },
+  movies: {
+    list: (params = {}) => {
+      const qs = new URLSearchParams();
+      if (params.query) qs.set('q', params.query);
+      if (params.genre) qs.set('genre', params.genre);
+      if (params.limit) qs.set('limit', String(params.limit));
+      const suffix = qs.toString() ? `?${qs.toString()}` : '';
+      return request(`/api/movies${suffix}`);
+    },
+    get: (id) => request(`/api/movies/${id}`),
+    create: (data) => request('/api/movies', { method: 'POST', body: JSON.stringify(data) }),
+    remove: (id) => request(`/api/movies/${id}`, { method: 'DELETE' }),
+    status: () => request('/api/movies/status'),
+    setStatus: (id, patch) => request(`/api/movies/${id}/status`, { method: 'PATCH', body: JSON.stringify(patch) }),
+  },
 };

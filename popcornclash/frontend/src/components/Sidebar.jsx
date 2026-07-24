@@ -51,17 +51,17 @@ export default function Sidebar({
             </button>
           </div>
 
-          {/* Brand */}
-          <div className="cursor-pointer group" onClick={() => handleMovieTab('library')}>
+           {/* Brand */}
+          <div className="cursor-pointer group" onClick={() => handleMovieTab('discover')}>
             <div className="text-[10px] uppercase tracking-[0.4em] text-on-surface-variant block mb-2 font-mono">PopcornClash</div>
-            <h1 className="font-serif text-3xl font-light italic text-white tracking-tight leading-none group-hover:text-on-surface-variant transition-colors">Movie Hub</h1>
+            <h1 className="font-serif text-3xl font-light italic text-white tracking-tight leading-none group-hover:text-on-surface-variant transition-colors">Matchday Arena</h1>
             <div className="w-8 h-px bg-surface-container-high mt-4 group-hover:w-16 transition-all duration-500"></div>
             <p className="text-on-surface-variant text-[10px] uppercase tracking-widest mt-3 font-medium">{streakDays}-day Streak</p>
           </div>
 
-          {/* Movie Hub tabs */}
+          {/* PopcornJam / watch-party tabs */}
           <div>
-            <div className="text-[9px] uppercase tracking-[0.35em] text-on-surface-variant font-mono mb-3">Movies</div>
+            <div className="text-[9px] uppercase tracking-[0.35em] text-on-surface-variant font-mono mb-3">PopcornJam</div>
             <div className="flex flex-col space-y-1">
               {movieTabs.map((item) => {
                 const Icon = item.icon;
@@ -85,9 +85,9 @@ export default function Sidebar({
             </div>
           </div>
 
-          {/* Match Predictions section */}
+           {/* Matchday section */}
           <div>
-            <div className="text-[9px] uppercase tracking-[0.35em] text-on-surface-variant font-mono mb-3">Match Predictions</div>
+            <div className="text-[9px] uppercase tracking-[0.35em] text-on-surface-variant font-mono mb-3">Matchday</div>
             <div className="flex flex-col space-y-1">
               {matchPages.map((item) => {
                 const Icon = item.icon;

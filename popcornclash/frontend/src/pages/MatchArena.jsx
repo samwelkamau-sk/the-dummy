@@ -32,7 +32,7 @@ export default function MatchArena({ matchId }) {
   }, [matchId]);
 
   const handleLockPrediction = async () => {
-    if (!vote.selection || submitted || !match) return;
+    if (!vote.selection || submitted) return;
     setSubmitting(true);
     try {
       const predicted_winner_id = vote.selection === 'HOME'

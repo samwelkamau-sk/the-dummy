@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
+import { useMovies } from '../hooks/useMovies';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import MyLibraryView from '../components/MyLibraryView';
@@ -20,6 +21,7 @@ export default function CineMatch() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useGame();
+  const { movies, createMovie, deleteMovie, setMovieStatus } = useMovies();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showCineJam, setShowCineJam] = useState(false);
@@ -30,13 +32,13 @@ export default function CineMatch() {
     return saved || 'discover';
   });
 
+  /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
   useEffect(() => {
     if (typeof location.state?.activeTab === 'string') {
-      // Sync active tab from router state on navigation; safe because this only fires when location.key changes
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveTab(location.state.activeTab);
     }
-  }, [location.key, location.state?.activeTab]);
+  }, [location.key]);
+  /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
   const getActivePage = () => {
     if (location.pathname.startsWith('/match/')) return 'match';
@@ -52,12 +54,7 @@ export default function CineMatch() {
   const activeMatchId = location.pathname.startsWith('/match/') ? location.pathname.split('/match/')[1] : null;
 
   const handleLogout = () => { logout(); navigate('/login'); };
-  const onSearchFocus = () => {};
 
-  const [movies, setMovies] = useState(() => {
-    const saved = localStorage.getItem('popcornclash_movies');
-    return saved ? JSON.parse(saved) : [];
-  });
   const [collections, setCollections] = useState(() => {
     const saved = localStorage.getItem('popcornclash_collections');
     return saved ? JSON.parse(saved) : [];
@@ -67,27 +64,16 @@ export default function CineMatch() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  useEffect(() => { localStorage.setItem('popcornclash_movies', JSON.stringify(movies)); }, [movies]);
   useEffect(() => { localStorage.setItem('popcornclash_collections', JSON.stringify(collections)); }, [collections]);
   useEffect(() => { localStorage.setItem('popcornclash_history', JSON.stringify(history)); }, [history]);
   useEffect(() => { localStorage.setItem('popcornclash_tab', activeTab); }, [activeTab]);
 
-  const handleAddOrUpdateMovie = async (movieData) => {
-    const existingIndex = movies.findIndex((m) => m.id === movieData.id || m.title === movieData.title);
-    if (existingIndex > -1) {
-      const updated = [...movies];
-      updated[existingIndex] = { ...updated[existingIndex], ...movieData, id: updated[existingIndex].id };
-      setMovies(updated);
-    } else {
-      setMovies(prev => [...prev, { ...movieData, id: movieData.id || Math.random().toString(36).substring(2, 9) }]);
-    }
-  };
+  // Movies are owned by the backend (/api/movies); status/favorite are
+  // persisted per-user via PATCH /api/movies/:id/status (setMovieStatus).
+  const handleDeleteMovie = async (id) => { await deleteMovie(id); };
 
-  const handleDeleteMovie = async (id) => setMovies(movies.filter((m) => m.id !== id));
-
-  const handleUpdateMovieStatus = async (id, status) => {
-    const target = movies.find((m) => m.id === id);
-    if (target) await handleAddOrUpdateMovie({ ...target, status });
+  const handleUpdateMovieStatus = async (id, patch) => {
+    setMovieStatus(id, patch);
   };
 
   const handleAddCollection = async (name, movieIds) => {
@@ -104,17 +90,18 @@ export default function CineMatch() {
   const handleDeleteHistory = async (id) => setHistory(history.filter((h) => h.id !== id));
 
   const handleReplayMovie = async (movie) => {
-    await handleAddOrUpdateMovie({ ...movie, progress: 0, status: 'watching' });
+    await handleUpdateMovieStatus(movie.id, { status: 'watching' });
     setHistory([{ id: Math.random().toString(36).substring(2, 9), title: movie.title, watchedAt: 'Just now', progress: 5, posterUrl: movie.posterUrl }, ...history]);
     setActivePlayingMovie({ ...movie, progress: 0, status: 'watching' });
   };
 
   const handleProgressUpdate = async (id, progressVal, status) => {
-    const target = movies.find((m) => m.id === id);
-    if (!target) return;
-    await handleAddOrUpdateMovie({ ...target, progress: progressVal, status });
+    await handleUpdateMovieStatus(id, { status });
     if (progressVal >= 100) {
-      setHistory([{ id: Math.random().toString(36).substring(2, 9), title: target.title, watchedAt: 'Just now', progress: 100, posterUrl: target.posterUrl }, ...history]);
+      const target = movies.find((m) => m.id === id);
+      if (target) {
+        setHistory([{ id: Math.random().toString(36).substring(2, 9), title: target.title, watchedAt: 'Just now', progress: 100, posterUrl: target.posterUrl }, ...history]);
+      }
     }
   };
 
@@ -125,7 +112,7 @@ export default function CineMatch() {
           {activeTab === 'library' && (
             <MyLibraryView
               movies={movies} collections={collections} history={history}
-              searchQuery={searchQuery} onAddMovie={handleAddOrUpdateMovie}
+              searchQuery={searchQuery} onCreateMovie={createMovie}
               onDeleteMovie={handleDeleteMovie} onUpdateMovieStatus={handleUpdateMovieStatus}
               onAddCollection={handleAddCollection} onDeleteCollection={handleDeleteCollection}
               onDeleteHistory={handleDeleteHistory}
@@ -134,7 +121,7 @@ export default function CineMatch() {
           )}
           {activeTab === 'discover' && (
             <DiscoverView
-              onAddMovieToLibrary={handleAddOrUpdateMovie} moviesInLibrary={movies}
+              onCreateMovie={createMovie}
               searchQueryFromHeader={searchQuery} onPlayMovie={setActivePlayingMovie}
             />
           )}
@@ -183,7 +170,7 @@ export default function CineMatch() {
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           activeTab={activeTab}
-          onSearchFocus={onSearchFocus}
+          activePage={activePage}
           onMenuClick={() => setSidebarOpen(true)}
         />
 
@@ -192,7 +179,7 @@ export default function CineMatch() {
         </main>
       </div>
 
-      {showCineJam && <CineJamLobby onClose={() => setShowCineJam(false)} onAddMovieToLibrary={handleAddOrUpdateMovie} />}
+      {showCineJam && <CineJamLobby onClose={() => setShowCineJam(false)} onCreateMovie={createMovie} />}
       {activePlayingMovie && <MoviePlayer movie={activePlayingMovie} onClose={() => setActivePlayingMovie(null)} onProgressUpdate={handleProgressUpdate} />}
     </div>
   );

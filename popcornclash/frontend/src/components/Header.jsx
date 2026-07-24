@@ -4,9 +4,16 @@ export default function Header({
   searchQuery, 
   setSearchQuery, 
   activeTab, 
+  activePage,
   onSearchFocus,
   onMenuClick
 }) {
+  const isMovieHub = activePage === 'movies' && (activeTab === 'discover' || activeTab === 'library');
+  const placeholder = isMovieHub
+    ? (activeTab === 'discover'
+        ? "Describe your ideal film mood, e.g. 'cozy rain neo-noir'..."
+        : "Search your library by title, genre, or year...")
+    : "Search matches by team name...";
   return (
     <header className="fixed top-0 right-0 w-full md:w-[calc(100%-260px)] h-20 border-b border-surface-container-high bg-[#0c0a09]/90 backdrop-blur-md z-40 flex items-center px-4 md:px-10">
       <div className="flex items-center gap-3 w-full max-w-2xl">
@@ -25,11 +32,7 @@ export default function Header({
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={onSearchFocus}
             className="w-full bg-transparent border-b border-surface-container-high rounded-none py-2 pl-9 pr-4 text-xs tracking-wide focus:border-warm-gold focus:outline-none transition-all text-white placeholder-surface-container-high"
-            placeholder={
-              activeTab === 'discover'
-                ? "Describe your ideal film mood, e.g. 'cozy rain neo-noir'..."
-                : "Search your library by title, genre, or year..."
-            }
+            placeholder={placeholder}
           />
         </div>
       </div>

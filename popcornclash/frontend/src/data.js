@@ -1,6 +1,3 @@
-export const INITIAL_MOVIES = [];
-export const INITIAL_COLLECTIONS = [];
-export const INITIAL_WATCHING_HISTORY = [];
-export const INITIAL_TEAMS = [];
-export const INITIAL_FRIENDS = [];
-export const INITIAL_PREDICTORS = [];
+// Reserved for shared static data. Currently the app sources movies/teams from
+// the backend API and persists the local movie library to localStorage, so no
+// static seed data is required here.
